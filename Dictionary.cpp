@@ -58,7 +58,7 @@ int Dictionary::positionalDiff(std::string word1, std::string word2) {
 std::vector<std::string> Dictionary::neighborsOf(std::string word) {
     std::vector<std::string> rVct;
     for (std::string i : words){
-        if (positionalDiff(word, i) <= 1){
+        if (positionalDiff(word, i) == 1){
             rVct.push_back(i);
         }
     }
