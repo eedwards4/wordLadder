@@ -17,9 +17,16 @@ std::vector<std::tuple<std::string, std::string>> readStartTargetWords(const std
     //     startTargetVector.push_back(make_tuple(word1, word2));
     // end-while
 
+    while (!ladderStream.eof()){
+        std::string str1, str2;
+        ladderStream >> str1;
+        ladderStream >> str2;
+        startTargetVector.emplace_back(str1, str2);
+    }
+
     // Just so you see how this works, let's add two arbitrary words.
-    std::string bell = "bell", ball = "ball";
-    startTargetVector.push_back(std::make_tuple(bell, ball));
+    // std::string bell = "bell", ball = "ball";
+    // startTargetVector.push_back(std::make_tuple(bell, ball));
     return startTargetVector;
 }
 
@@ -42,6 +49,10 @@ int main(int argc, char *argv[]) { // the main function.
 
     Dictionary dictionary(argv[1]);
     auto arrayOfPairsToBuildLadders = readStartTargetWords(argv[2]);
+    for (auto i : arrayOfPairsToBuildLadders){ // DEBUG
+        std::cout << get<0>(i);
+        std::cout << get<1>(i) << "\n";
+    }
     for(const auto & [startWord, targetWord]: arrayOfPairsToBuildLadders) {
         std::cout << "start word is " << startWord << "; target word is " << targetWord << std::endl;
     }

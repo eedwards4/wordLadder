@@ -14,13 +14,15 @@ class Dictionary {
 
 public:
     Dictionary(std::string inputFileName);
-    int size();  // number of words in the dictionary
+    int size(){
+        return words.size();
+    }  // number of words in the dictionary
     std::vector<std::string> pathFromTo(std::string from, std::string to);
     // member returns the index of "word" in "words"
     // if "word" is not a member of the dictionary, it
     // returns size(). See comments for idxOfSuccessorWordFrom
     // to learn how you would use the index that this function returns.
-    int member(std::string word);
+    int member(std::string sTerm);
     ~Dictionary();
 
 private:
@@ -48,6 +50,9 @@ private:
     //     words[idx] is a successor for "bell".
     // }
     int idxOfSuccessorWordFrom(std::string word, int fromIdx);
+
+    // Get the neighbors of word n.
+    std::vector<std::string> neighborsOf(std::string word);
 
     void resetPath(); // this function sets all elements of array "used" to false.
     void printDictionary();
