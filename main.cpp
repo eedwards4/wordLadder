@@ -57,6 +57,5 @@ int main(int argc, char *argv[]) { // the main function.
         std::cout << "start word is " << startWord << "; target word is " << targetWord << std::endl;
     }
 
-
     return 0;
 }

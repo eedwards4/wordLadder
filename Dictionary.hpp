@@ -1,5 +1,6 @@
 //
 // Created by Ali Kooshesh on 8/22/23.
+// Completed by Emily Hernandez and Ethan Edwards on 10/1/2021.
 //
 
 #ifndef WORDLADDER_DICTIONARY_HPP
@@ -13,16 +14,19 @@
 class Dictionary {
 
 public:
-    Dictionary(std::string inputFileName);
-    int size(){
-        return words.size();
-    }  // number of words in the dictionary
+    explicit Dictionary(std::string inputFileName);
+
+    int size(){ return words.size(); }  // number of words in the dictionary
+
+
     std::vector<std::string> pathFromTo(std::string from, std::string to);
+
     // member returns the index of "word" in "words"
     // if "word" is not a member of the dictionary, it
     // returns size(). See comments for idxOfSuccessorWordFrom
     // to learn how you would use the index that this function returns.
     int member(std::string sTerm);
+
     ~Dictionary();
 
 private:

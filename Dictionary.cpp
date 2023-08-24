@@ -1,5 +1,6 @@
 //
 // Created by Ali Kooshesh on 8/22/23.
+// Completed by Emily Hernandez and Ethan Edwards on 10/1/2021.
 //
 
 #include "Dictionary.hpp"
@@ -8,6 +9,7 @@
 #include <fstream>
 #include "Dictionary.hpp"
 
+// ------------------------------------------------------Management-----------------------------------------------------
 Dictionary::Dictionary(std::string inputFileName) {
     // open inputFileName and store its contents, which is a collection of
     // words, one per line, in vector, "words".
@@ -28,13 +30,13 @@ Dictionary::~Dictionary() {
         dictionaryStream.close();
 }
 
-void Dictionary::printDictionary() {
-    // print the words in the dictionary.
-    for (std::string i : words){
-        std::cout << i << "\n";
-    }
+// --------------------------------------------------------External-----------------------------------------------------
+// Complex
+std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to) {
+    return std::vector<std::string>();
 }
 
+// Simple
 int Dictionary::member(std::string sTerm) {
     int rVal = 0;
     for (std::string word : words){
@@ -43,6 +45,27 @@ int Dictionary::member(std::string sTerm) {
         }
     }
     return size();
+}
+
+// --------------------------------------------------------Internal-----------------------------------------------------
+// Complex
+int Dictionary::idxOfSuccessorWordFrom(std::string word, int fromIdx) {
+    int idx = fromIdx;
+    while (idx < words.size()){
+        if (positionalDiff(word, words[idx]) == 1){
+            return idx;
+        }
+        idx++;
+    }
+    return words.size();
+}
+
+// Simple
+void Dictionary::printDictionary() {
+    // print the words in the dictionary.
+    for (std::string i : words){
+        std::cout << i << "\n";
+    }
 }
 
 int Dictionary::positionalDiff(std::string word1, std::string word2) {
@@ -63,4 +86,17 @@ std::vector<std::string> Dictionary::neighborsOf(std::string word) {
         }
     }
     return rVct;
+}
+
+void Dictionary::resetPath() {
+    for (bool i : used){
+        i = false;
+    }
+}
+
+void Dictionary::printLadder() {
+    while(!ladder.empty()){
+        std::cout << std::get<0>(ladder.top()) << ", " << std::get<1>(ladder.top()) << "\n";
+        ladder.pop();
+    }
 }
