@@ -33,7 +33,26 @@ Dictionary::~Dictionary() {
 // --------------------------------------------------------External-----------------------------------------------------
 // Complex
 std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to) {
-    return std::vector<std::string>();
+    std::vector<std::string> rVect;
+    std::string currWord;
+    int currIdx = 0;
+
+    while (positionalDiff(currWord, targetWord) != 1){ // Loop until we find a successor word
+        while (currIdx != size()){ // Loop through all words in dictionary looking for an unused match
+            if (positionalDiff(currWord, words[currIdx]) == 1 && !used[currIdx]){
+                ladder.push(std::make_tuple(words[currIdx], currIdx));
+                used[currIdx] = true;
+                currWord = words[currIdx];
+                currIdx = 0;
+                break;
+            }
+            currIdx++;
+        }
+        if (currIdx == size()){
+            currWord = backtrack(currWord);
+        }
+    }
+    return rVect;
 }
 
 // Simple
@@ -60,6 +79,12 @@ int Dictionary::idxOfSuccessorWordFrom(std::string word, int fromIdx) {
     return words.size();
 }
 
+std::string Dictionary::backtrack(std::string currWord) {
+    int currIdx = member(currWord);
+    // Flag the word as used
+    used[currIdx] = true;
+    return words[currIdx - 1];
+}
 // Simple
 void Dictionary::printDictionary() {
     // print the words in the dictionary.
