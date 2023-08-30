@@ -79,6 +79,8 @@ std::vector<std::string> Dictionary::pathFromToOLD(std::string from, std::string
 std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to) {
     string currWord = startWord = from; targetWord = to;
     int tracker = 0;
+    // Reset used vector
+    resetPath();
     // Mark initial word as used and add it to the ladder
     for (const string& i : words){
         if (i == currWord){
@@ -91,6 +93,7 @@ std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to
     // While our current word is not the target word attempt to build a path
     while (positionalDiff(currWord, targetWord) != 0){
         for (const string& i : words){
+            if (tracker == size()){break;}
             if (used[tracker] == 0){
                 if (positionalDiff(currWord, i) == 1){
                     ladder.emplace(i, tracker);
@@ -102,7 +105,13 @@ std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to
             tracker++;
         }
 
+        // Backtrack if no successor word found
         if (tracker == size()){
+            // First word interceptor
+            if (ladder.size() == 1){
+                cout << "No path found\n";
+                return {};
+            }
             // No successor word found. Backtrack
             ladder.pop();
             currWord = get<0>(ladder.top());
@@ -165,7 +174,7 @@ std::vector<std::string> Dictionary::neighborsOf(std::string word) { // u
 }
 
 void Dictionary::resetPath() { // u
-    for (bool i : used){
+    for (auto && i : used){
         i = false;
     }
 }
