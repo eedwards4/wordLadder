@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "Dictionary.hpp"
 
 // ------------------------------------------------------Management-----------------------------------------------------
@@ -33,7 +34,8 @@ Dictionary::~Dictionary() {
 
 // --------------------------------------------------------External-----------------------------------------------------
 // Complex
-std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to) {
+/*
+std::vector<std::string> Dictionary::pathFromToOLD(std::string from, std::string to) {
     std::vector<std::string> rVect;
     std::string currWord = from;
     startWord = from; targetWord = to;
@@ -72,6 +74,42 @@ std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to
     }
     printLadder();
     return rVect;
+}*/
+
+std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to) {
+    string currWord = startWord = from; targetWord = to;
+    int tracker = 0;
+    // Mark initial word as used and add it to the ladder
+    for (const string& i : words){
+        if (i == currWord){
+            ladder.emplace(currWord, member(currWord));
+            used[member(i)] = true;
+            break;
+        }
+    }
+
+    // While our current word is not the target word attempt to build a path
+    while (positionalDiff(currWord, targetWord) != 0){
+        for (const string& i : words){
+            if (used[tracker] == 0){
+                if (positionalDiff(currWord, i) == 1){
+                    ladder.emplace(i, tracker);
+                    currWord = i;
+                    used[tracker] = true;
+                    break;
+                }
+            }
+            tracker++;
+        }
+
+        if (tracker == size()){
+            // No successor word found. Backtrack
+            ladder.pop();
+            currWord = get<0>(ladder.top());
+        }
+    }
+    printLadder();
+    return {}; // Return blank vector to remain in line with I/O reqs
 }
 
 // Simple
@@ -133,8 +171,12 @@ void Dictionary::resetPath() { // u
 }
 
 void Dictionary::printLadder() { // i
+    vector<string> rVct;
     while(!ladder.empty()){
-        std::cout << std::get<0>(ladder.top()) << ", " << std::get<1>(ladder.top()) << "\n";
+        rVct.push_back(get<0>(ladder.top()));
         ladder.pop();
+    }
+    for (const string& i : rVct){
+        cout << i << "\n";
     }
 }
