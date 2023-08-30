@@ -9,8 +9,6 @@
 #include <fstream>
 #include "Dictionary.hpp"
 
-using namespace std;
-
 // ------------------------------------------------------Management-----------------------------------------------------
 Dictionary::Dictionary(std::string inputFileName) {
     // open inputFileName and store its contents, which is a collection of
@@ -37,15 +35,22 @@ Dictionary::~Dictionary() {
 // Complex
 std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to) {
     std::vector<std::string> rVect;
-    std::string currWord = from; startWord = from;
-    targetWord = to;
-    int currIdx = 0;
+    std::string currWord = from;
+    startWord = from; targetWord = to;
+    // Mark initial word as used
+    for (int i = 0; i < words.size(); i++){
+        if (words[i] == currWord){
+            used[i] = true;
+            break;
+        }
+    }
+
     cout << "Entered pathFromTo\n";
     while (positionalDiff(currWord, targetWord) != 0){ // Loop until we find a successor word
         cout << "Entered iteration of while loop on word: " << currWord << "\n";
-        int tracker = 0;
+        int tracker = 0, currIdx = 0;
         for (int i = 0; i < words.size(); i++){
-            cout << "Comparing" << currWord << " and " << words[i] << "\n";
+            cout << "Comparing " << currWord << " and " << words[i] << "\n";
             if (positionalDiff(currWord, words[i]) == 1 && used[i] == false){
                 cout << "Found a successor word: " << words[i] << "\n";
                 ladder.push(std::make_tuple(currWord, i));
@@ -54,10 +59,14 @@ std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to
                 used[i] = true;
                 break;
             }
+            tracker++;
         }
         if (tracker == size()){
             cout << "No successor word found. Backtracking...\n";
-            currWord = ladder.top();
+            // Remove current word from ladder
+            ladder.pop();
+            // Get previous word from ladder
+            currWord = get<0>(ladder.top());
         }
         cout << "Current word is: " << currWord << "\n";
     }
@@ -89,9 +98,6 @@ int Dictionary::idxOfSuccessorWordFrom(std::string word, int fromIdx) { // u
     return words.size();
 }
 
-std::string Dictionary::backtrack(std::string currWord) { // i
-
-}
 // Simple
 void Dictionary::printDictionary() { // i
     // print the words in the dictionary.

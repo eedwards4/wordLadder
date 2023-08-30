@@ -11,6 +11,8 @@
 #include<string>
 #include<fstream>
 
+using namespace std;
+
 class Dictionary {
 
 public:
@@ -39,10 +41,6 @@ private:
     // where its two arguments differ. For example, it will return
     // 2 if bell and bowl were passed to it (e and o; l and w).
     int positionalDiff(std::string word1, std::string word2);
-
-    // backtrack backtracks from the current word to the previous word, and
-    // marks the current word as used so that that path won't be taken again
-    std::string backtrack(std::string currWord);
 
     // This function finds a successor word for "word" in
     // dictionary starting at index "fromIdx". If there is
