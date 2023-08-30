@@ -50,11 +50,12 @@ int main(int argc, char *argv[]) { // the main function.
     Dictionary dictionary(argv[1]);
     auto arrayOfPairsToBuildLadders = readStartTargetWords(argv[2]);
     for (auto i : arrayOfPairsToBuildLadders){ // DEBUG
-        std::cout << get<0>(i);
+        std::cout << get<0>(i) << " ";
         std::cout << get<1>(i) << "\n";
     }
     for(const auto & [startWord, targetWord]: arrayOfPairsToBuildLadders) {
         std::cout << "start word is " << startWord << "; target word is " << targetWord << std::endl;
+        dictionary.pathFromTo(startWord, targetWord);
     }
 
     return 0;

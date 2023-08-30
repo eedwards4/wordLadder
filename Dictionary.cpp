@@ -9,6 +9,8 @@
 #include <fstream>
 #include "Dictionary.hpp"
 
+using namespace std;
+
 // ------------------------------------------------------Management-----------------------------------------------------
 Dictionary::Dictionary(std::string inputFileName) {
     // open inputFileName and store its contents, which is a collection of
@@ -18,6 +20,7 @@ Dictionary::Dictionary(std::string inputFileName) {
     while (inFile.is_open() && !inFile.eof()){
         inFile >> word;
         words.push_back(word);
+        used.push_back(false); // Prepopulate used vector with false values
     }
     inFile.close();
     std::cout << "Creating an instance of Dictionary with input file: " << inputFileName << std::endl;
@@ -34,29 +37,36 @@ Dictionary::~Dictionary() {
 // Complex
 std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to) {
     std::vector<std::string> rVect;
-    std::string currWord;
+    std::string currWord = from; startWord = from;
+    targetWord = to;
     int currIdx = 0;
-
-    while (positionalDiff(currWord, targetWord) != 1){ // Loop until we find a successor word
-        while (currIdx != size()){ // Loop through all words in dictionary looking for an unused match
-            if (positionalDiff(currWord, words[currIdx]) == 1 && !used[currIdx]){
-                ladder.push(std::make_tuple(words[currIdx], currIdx));
-                used[currIdx] = true;
-                currWord = words[currIdx];
-                currIdx = 0;
+    cout << "Entered pathFromTo\n";
+    while (positionalDiff(currWord, targetWord) != 0){ // Loop until we find a successor word
+        cout << "Entered iteration of while loop on word: " << currWord << "\n";
+        int tracker = 0;
+        for (int i = 0; i < words.size(); i++){
+            cout << "Comparing" << currWord << " and " << words[i] << "\n";
+            if (positionalDiff(currWord, words[i]) == 1 && used[i] == false){
+                cout << "Found a successor word: " << words[i] << "\n";
+                ladder.push(std::make_tuple(currWord, i));
+                currWord = words[i];
+                currIdx = i;
+                used[i] = true;
                 break;
             }
-            currIdx++;
         }
-        if (currIdx == size()){
-            currWord = backtrack(currWord);
+        if (tracker == size()){
+            cout << "No successor word found. Backtracking...\n";
+            currWord = ladder.top();
         }
+        cout << "Current word is: " << currWord << "\n";
     }
+    printLadder();
     return rVect;
 }
 
 // Simple
-int Dictionary::member(std::string sTerm) {
+int Dictionary::member(std::string sTerm) { // u
     int rVal = 0;
     for (std::string word : words){
         if (word == sTerm){
@@ -68,7 +78,7 @@ int Dictionary::member(std::string sTerm) {
 
 // --------------------------------------------------------Internal-----------------------------------------------------
 // Complex
-int Dictionary::idxOfSuccessorWordFrom(std::string word, int fromIdx) {
+int Dictionary::idxOfSuccessorWordFrom(std::string word, int fromIdx) { // u
     int idx = fromIdx;
     while (idx < words.size()){
         if (positionalDiff(word, words[idx]) == 1){
@@ -79,21 +89,18 @@ int Dictionary::idxOfSuccessorWordFrom(std::string word, int fromIdx) {
     return words.size();
 }
 
-std::string Dictionary::backtrack(std::string currWord) {
-    int currIdx = member(currWord);
-    // Flag the word as used
-    used[currIdx] = true;
-    return words[currIdx - 1];
+std::string Dictionary::backtrack(std::string currWord) { // i
+
 }
 // Simple
-void Dictionary::printDictionary() {
+void Dictionary::printDictionary() { // i
     // print the words in the dictionary.
     for (std::string i : words){
         std::cout << i << "\n";
     }
 }
 
-int Dictionary::positionalDiff(std::string word1, std::string word2) {
+int Dictionary::positionalDiff(std::string word1, std::string word2) { // u
     int rVal = 0;
     for (int i = 0; i < word1.length(); i++){
         if (word1[i] != word2[i]){
@@ -103,7 +110,7 @@ int Dictionary::positionalDiff(std::string word1, std::string word2) {
     return rVal;
 }
 
-std::vector<std::string> Dictionary::neighborsOf(std::string word) {
+std::vector<std::string> Dictionary::neighborsOf(std::string word) { // u
     std::vector<std::string> rVct;
     for (std::string i : words){
         if (positionalDiff(word, i) == 1){
@@ -113,13 +120,13 @@ std::vector<std::string> Dictionary::neighborsOf(std::string word) {
     return rVct;
 }
 
-void Dictionary::resetPath() {
+void Dictionary::resetPath() { // u
     for (bool i : used){
         i = false;
     }
 }
 
-void Dictionary::printLadder() {
+void Dictionary::printLadder() { // i
     while(!ladder.empty()){
         std::cout << std::get<0>(ladder.top()) << ", " << std::get<1>(ladder.top()) << "\n";
         ladder.pop();

@@ -18,7 +18,6 @@ public:
 
     int size(){ return words.size(); }  // number of words in the dictionary
 
-
     std::vector<std::string> pathFromTo(std::string from, std::string to);
 
     // member returns the index of "word" in "words"
