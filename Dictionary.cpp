@@ -34,90 +34,38 @@ Dictionary::~Dictionary() {
 
 // --------------------------------------------------------External-----------------------------------------------------
 // Complex
-/*
-std::vector<std::string> Dictionary::pathFromToOLD(std::string from, std::string to) {
-    std::vector<std::string> rVect;
-    std::string currWord = from;
-    startWord = from; targetWord = to;
-    // Mark initial word as used
-    for (int i = 0; i < words.size(); i++){
-        if (words[i] == currWord){
-            used[i] = true;
-            break;
-        }
-    }
-
-    cout << "Entered pathFromTo\n";
-    while (positionalDiff(currWord, targetWord) != 0){ // Loop until we find a successor word
-        cout << "Entered iteration of while loop on word: " << currWord << "\n";
-        int tracker = 0, currIdx = 0;
-        for (int i = 0; i < words.size(); i++){
-            cout << "Comparing " << currWord << " and " << words[i] << "\n";
-            if (positionalDiff(currWord, words[i]) == 1 && used[i] == false){
-                cout << "Found a successor word: " << words[i] << "\n";
-                ladder.push(std::make_tuple(currWord, i));
-                currWord = words[i];
-                currIdx = i;
-                used[i] = true;
-                break;
-            }
-            tracker++;
-        }
-        if (tracker == size()){
-            cout << "No successor word found. Backtracking...\n";
-            // Remove current word from ladder
-            ladder.pop();
-            // Get previous word from ladder
-            currWord = get<0>(ladder.top());
-        }
-        cout << "Current word is: " << currWord << "\n";
-    }
-    printLadder();
-    return rVect;
-}*/
-
 std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to) {
     string currWord = startWord = from; targetWord = to;
+    vector<string> neighbors;
     int tracker = 0;
     // Reset used vector
     resetPath();
-    // Mark initial word as used and add it to the ladder
-    for (const string& i : words){
-        if (i == currWord){
-            ladder.emplace(currWord, member(currWord));
-            used[member(i)] = true;
-            break;
-        }
-    }
+    // Push start word onto stack
+    ladder.push(make_tuple(currWord, member(currWord)));
+    // Mark start word as used
+    used[member(currWord)] = true;
 
-    // While our current word is not the target word attempt to build a path
-    while (positionalDiff(currWord, targetWord) != 0){
-        for (const string& i : words){
-            if (tracker == size()){break;}
-            if (used[tracker] == 0){
-                if (positionalDiff(currWord, i) == 1){
-                    ladder.emplace(i, tracker);
-                    currWord = i;
-                    used[tracker] = true;
-                    break;
-                }
+    while (!ladder.empty()){
+        neighbors = neighborsOf(currWord);
+        tracker = 0;
+        for (string i : neighbors){
+            if (i == targetWord){
+                ladder.push(make_tuple(i, member(i)));
+                printLadder();
+                return {}; // Return blank vector to remain in line with I/O reqs
+            }
+            if (!used.at(member(i))){
+                ladder.push(make_tuple(i, member(i)));
+                currWord = i;
+                used[member(i)] = true;
             }
             tracker++;
         }
-
-        // Backtrack if no successor word found
-        if (tracker == size()){
-            // First word interceptor
-            if (ladder.size() == 1){
-                cout << "No path found\n";
-                return {};
-            }
-            // No successor word found. Backtrack
+        if (tracker == neighbors.size()){
             ladder.pop();
-            currWord = get<0>(ladder.top());
         }
     }
-    printLadder();
+    cout << "No ladder found.\n";
     return {}; // Return blank vector to remain in line with I/O reqs
 }
 
@@ -128,6 +76,7 @@ int Dictionary::member(std::string sTerm) { // u
         if (word == sTerm){
             return rVal;
         }
+        rVal++;
     }
     return size();
 }
@@ -185,7 +134,7 @@ void Dictionary::printLadder() { // i
         rVct.push_back(get<0>(ladder.top()));
         ladder.pop();
     }
-    for (const string& i : rVct){
-        cout << i << "\n";
+    for (int i = rVct.size() - 1; i >= 0; i--){
+        cout << rVct[i] << "\n";
     }
 }

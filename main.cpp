@@ -23,6 +23,7 @@ std::vector<std::tuple<std::string, std::string>> readStartTargetWords(const std
         ladderStream >> str2;
         startTargetVector.emplace_back(str1, str2);
     }
+    startTargetVector.erase(startTargetVector.end()-1); // Remove last element (empty string
 
     // Just so you see how this works, let's add two arbitrary words.
     // std::string bell = "bell", ball = "ball";
