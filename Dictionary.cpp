@@ -1,6 +1,5 @@
 //
 // Created by Ali Kooshesh on 8/22/23.
-// Completed by Ethan Edwards on 9/1/2021.
 //
 
 #include "Dictionary.hpp"
