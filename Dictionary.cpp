@@ -41,16 +41,16 @@ std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to
     while (!ladder.empty()){
         neighbors = neighborsOf(from);
         iter = 0;
-        for (const std::string& i : neighbors){
-            if (i == targetWord){
-                ladder.emplace(i, member(i));
+        while (iter < neighbors.size()){
+            if (neighbors.at(iter) == targetWord){
+                ladder.push(std::make_tuple(from, member(neighbors.at(iter))));
                 printLadder(rVct);
                 return rVct; // Return the ladder
             }
-            if (!used.at(member(i))){
-                ladder.emplace(i, member(i));
-                from = i;
-                used[member(i)] = true;
+            if (used.at(member(neighbors.at(iter))) == false){
+                ladder.push(std::make_tuple(from, member(neighbors.at(iter))));
+                from = neighbors.at(iter);
+                used[member(neighbors.at(iter))] = true;
                 break;
             }
             iter++;
