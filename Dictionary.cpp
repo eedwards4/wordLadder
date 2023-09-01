@@ -58,14 +58,18 @@ std::vector<std::string> Dictionary::pathFromTo(std::string from, std::string to
                 ladder.push(make_tuple(i, member(i)));
                 currWord = i;
                 used[member(i)] = true;
+                break;
             }
             tracker++;
         }
         if (tracker == neighbors.size()){
             ladder.pop();
+            if (!ladder.empty()){
+                currWord = get<0>(ladder.top());
+            }
         }
     }
-    cout << "No ladder found.\n";
+    cout << "No ladder for the pair " << from << " and " << to << " exists." << endl;
     return {}; // Return blank vector to remain in line with I/O reqs
 }
 

@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) { // the main function.
         std::cout << get<1>(i) << "\n";
     }
     for(const auto & [startWord, targetWord]: arrayOfPairsToBuildLadders) {
-        std::cout << "start word is " << startWord << "; target word is " << targetWord << std::endl;
+        std::cout << "A ladder for the pair " << startWord << " and " << targetWord << " is:\n";
         dictionary.pathFromTo(startWord, targetWord);
     }
 
