@@ -1,6 +1,6 @@
 //
 // Created by Ali Kooshesh on 8/22/23.
-// Completed by Emily Hernandez and Ethan Edwards on 10/1/2021.
+// Completed by Ethan Edwards on 9/1/2021.
 //
 
 #ifndef WORDLADDER_DICTIONARY_HPP
@@ -11,8 +11,6 @@
 #include<string>
 #include<fstream>
 #include<tuple>
-
-using namespace std;
 
 class Dictionary {
 
@@ -55,14 +53,14 @@ private:
     // } else {
     //     words[idx] is a successor for "bell".
     // }
-    int idxOfSuccessorWordFrom(std::string word, int fromIdx);
+    int idxOfSuccessorWordFrom(const std::string& word, int fromIdx);
 
     // Get the neighbors of word n.
-    std::vector<std::string> neighborsOf(std::string word);
+    std::vector<std::string> neighborsOf(const std::string& word);
 
     void resetPath(); // this function sets all elements of array "used" to false.
     void printDictionary();
-    void printLadder();
+    void printLadder(std::vector<std::string>& rVct);
 
 };
 
